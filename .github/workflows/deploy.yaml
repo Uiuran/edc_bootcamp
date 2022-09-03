@@ -9,27 +9,27 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      -uses: actions/checkout@v2
+      uses: actions/checkout@v2
 
       -name: Python 3.9
-      -uses: actions/setup-python@v2
-      -with:
+      uses: actions/setup-python@v2
+      with:
         python-version: 3.9.13
 
       -name: Terraform
-      -uses: hashicorp/setup-terraform@v1.2.1
+      uses: hashicorp/setup-terraform@v1.2.1
 
       -name: AWS Credentials
-      -uses: aws-actions/configure-aws-credentials@v1
-      -with:
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
         aws-access-key-id: "{{secrets.AWS_ACCESS_KEY_ID}}"
         aws-secret-access-key: "{{secrets.AWS_SECRET_ACCESS_KEY}}"
         aws-region: sa-east-1
 
       -name: IAC Terraform
-      -env:
+      env:
         COMMAND_IAC: Terraform
-      -run: 
+      run: 
         cd iac
         $COMMAND_IAC init
         $COMMAND_IAC validate
