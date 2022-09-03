@@ -1,0 +1,39 @@
+name: Test
+on:
+  pull_request:
+    branches: [master]
+  push:
+    branches: [dev]
+
+jobs:
+  test:
+    name: Deploy Datalake
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    
+    - name: Python 3.9
+      uses: actions/setup-python@v4
+      with:
+       python-version: 3.9.13      
+       
+    - name: Terraform
+      uses: hashicorp/setup-terraform@v1.2.1
+     
+    - name: AWS Credentials
+      uses: aws-actions/configure-aws-credentials@v1
+      with:
+        aws-region: sa-east-1
+        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        role-to-assume: ${{ secrets.AWS_ROLE_SESSION }}
+        
+    - name: IAC Terraform
+      env:
+        COMMAND_IAC: terraform
+      run: 
+        cd iac
+        $COMMAND_IAC init
+        $COMMAND_IAC validate
+        $COMMAND_IAC plan

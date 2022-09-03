@@ -1,32 +1,34 @@
 name: Deploy
 on:
-  push:
+   push:
     branches: [master]
 
 jobs:
-  deploy:
+   deploy:
     name: Deploy Datalake
     runs-on: ubuntu-latest
 
     steps:
-      -uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-      -name: Python 3.9
-        uses: actions/setup-python@v2
+      - name: Python 3.9
+        uses: actions/setup-python@v4
         with:
-          python-version: 3.9.13
+          python-version: '3.9.13'
 
-      -name: Terraform
+      - name: Terraform
         uses: hashicorp/setup-terraform@v1.2.1
 
-      -name: AWS Credentials
+      - name: AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
-        env:
+        with:
+          aws-region: sa-east-1        
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: sa-east-1
+          role-to-assume: ${{ secrets.AWS_ROLE_SESSION }}
+           
 
-      -name: IAC Terraform
+      - name: IAC Terraform
         env:
           COMMAND_IAC: Terraform
         run: 
