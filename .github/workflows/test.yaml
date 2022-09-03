@@ -25,13 +25,8 @@ jobs:
       uses: aws-actions/configure-aws-credentials@v1
       env:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      with:
-        aws-region: sa-east-1        
-
-    - name: IAC Terraform
-      env:
-        COMMAND_IAC: Terraform
+        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}  
+        aws-region: ${{sa-east-1}}
       run: 
         cd iac
         $COMMAND_IAC init
